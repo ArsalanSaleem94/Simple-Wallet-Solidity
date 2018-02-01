@@ -11,11 +11,17 @@ contract simpleWallet is mortal{
         uint maxTransferAmount;
     }
     
+    event someoneAddedSomeoneToTheSendersList(address thePersonWhoAdded, address thePersonWhoGotAdded, uint thisMuchHeCanSend);
+    
+    
     function addAddressToSendersList(address permitted, uint maxTransferAmount) onlyowner {
         myAddressMapping[permitted] = Permission(true, maxTransferAmount);
+        someoneAddedSomeoneToTheSendersList(msg.sender, permitted, maxTransferAmount);
+        
     }
     function removeAddressFromSendersList(address removeAddress) onlyowner {
-        myAddressMapping[removeAddress] = Permission(false, 0);
+        //myAddressMapping[removeAddress] = Permission(false, 0);
+        delete myAddressMapping[removeAddress];
     }
     
     function sendFunds(address receiver, uint amountInWei)
@@ -30,7 +36,6 @@ contract simpleWallet is mortal{
             }
         }
     }
-    
     function () payable{
         
     }
